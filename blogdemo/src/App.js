@@ -1,25 +1,66 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+//Bootstrap
+import 'bootstrap/dist/css/bootstrap.min.css';
 
+//Import Pages, Componets, Resources
+import HomePage from './pages/Home';
+import Profile from './pages/Profile';
+
+//Other Imports
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from "react-router-dom";
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/NavBar';
+import Nav from 'react-bootstrap/Nav';
+import Button from 'react-bootstrap/Button'
+
+//firebase
+import { app } from './firebase'
+
+class App extends React.Component{
+    constructor(props){
+        super(props)
+    }
+
+    state = {
+      currUser: null
+    }
+
+    componentDidMount = async () => {
+        //Listens for user changes
+        app.auth().onAuthStateChanged(async (user) => {
+            if(user){
+                this.setState({currUser: user})
+            }
+            else{
+                this.setState({currUser: null});
+            }
+        })
+    }
+
+    render(){
+       return(
+           <Router>
+               <Container fluid={true}>
+                   <Navbar bg="transparent" expand="lg">
+                       <Navbar.Toggle aria-controls="navbar-toggle"/>
+                       <Navbar.Collapse id="navbar-toggle">
+                           <Nav className="ml-auto">
+                               <h5><Link className="nav-link navtext" to="/">Home</Link></h5>
+                               {this.state.currUser !== null ? <h5> <Button>SignOut</Button></h5> : <h5> <Link className="nav-link navtext" to="/Auth">Login</Link></h5>}
+                           </Nav>
+                       </Navbar.Collapse>
+                   </Navbar>
+                   <Route path="/" exact render={() => <HomePage />} />
+                   <Route path="/profile" exact render={() => <Profile />} />
+               </Container>
+           </Router>
+       );
+   }
+}
 export default App;
