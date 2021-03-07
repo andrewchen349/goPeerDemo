@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 //Import Pages, Componets, Resources
 import HomePage from './pages/Home';
 import Profile from './pages/Profile';
+import Register from './pages/Register';
 
 //Other Imports
 import {
@@ -52,12 +53,13 @@ class App extends React.Component{
                        <Navbar.Collapse id="navbar-toggle">
                            <Nav className="ml-auto">
                                <h5><Link className="nav-link navtext" to="/">Home</Link></h5>
-                               {this.state.currUser !== null ? <h5> <Button>SignOut</Button></h5> : <h5> <Link className="nav-link navtext" to="/Auth">Login</Link></h5>}
+                               {this.state.currUser !== null ? <h5> <Button>SignOut</Button></h5> : <h5> <Link className="nav-link navtext" to="/login">Login</Link></h5>}
                            </Nav>
                        </Navbar.Collapse>
                    </Navbar>
                    <Route path="/" exact render={() => <HomePage />} />
                    <Route path="/profile" exact render={() => <Profile />} />
+                   <Route path="/register" exact render={() => <Register/>} />
                </Container>
            </Router>
        );
